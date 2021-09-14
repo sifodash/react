@@ -31,8 +31,7 @@ function App() {
   
   return (
     <div className="App">
-      <h1>
-        Hello {getTitle('React')}</h1>
+      <h1>My Stories</h1>
       <label htmlFor='search'>Search:</label>
       <input id='search' type='text' />
     </div>
