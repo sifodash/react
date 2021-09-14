@@ -35,8 +35,9 @@ function App() {
   return (
     <div className="App">
       <h1>My Stories</h1>
-      <label htmlFor='search'>Search: </label>
-      <input id='search' type='text' />
+     {/* Creating first instance of list */}
+      <List />
+      {/* Creating second instance of list */}
       <List />
     </div>
   )
@@ -65,5 +66,14 @@ function List() {
 }
 
 
+function Search(){
+  return (
+    <div>
+      <label htmlFor='search'>Search: </label>
+      <input id='search' type='text' />
+
+    </div>
+  )
+}
 
 export default App;
