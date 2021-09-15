@@ -32,11 +32,16 @@ function App() {
   ]
   
 
+  function handleSearch(event){
+    return (
+      console.log(event.target.value)
+    )
+  }
   
   return (
     <div className="App">
       <h1>My Stories</h1>
-      <Search />
+      <Search onSearch={handleSearch}/>
      {/* Creating first instance of list */}
       <List list={stories}/>
 
@@ -62,13 +67,17 @@ function List(props) {
 }
 
 
-function Search(){
+function Search(props){
   const [searchTerm, setSearchTerm] = React.useState('')
 
   function handleChange(event){
     setSearchTerm(event.target.value)
+    
+    props.onSearch(event)
   
   }
+
+  
 
   return (
     <div>
