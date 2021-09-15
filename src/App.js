@@ -31,17 +31,14 @@ function App() {
     }
   ]
   
-
   function handleSearch(event){
-    return (
-      console.log(event.target.value)
-    )
+    console.log(event.target.value)
   }
   
   return (
     <div className="App">
       <h1>My Stories</h1>
-      <Search onSearch={handleSearch}/>
+      <Search onSearch={handleSearch} />
      {/* Creating first instance of list */}
       <List list={stories}/>
 
@@ -72,12 +69,9 @@ function Search(props){
 
   function handleChange(event){
     setSearchTerm(event.target.value)
-    
+  
     props.onSearch(event)
-  
   }
-
-  
 
   return (
     <div>
