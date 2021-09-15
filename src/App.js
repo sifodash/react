@@ -1,7 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
 import { getByTitle } from '@testing-library/dom';
-
+import React from 'react'
+import ReactDom from 'react-dom'
 
 
 
@@ -52,7 +53,7 @@ function List(props) {
         return(
 
         <Item key={item.objectID} item={item} />
-        
+
         )
       })}
 
@@ -62,9 +63,10 @@ function List(props) {
 
 
 function Search(){
+  const [searchTerm, setSearchTerm] = React.useState('')
 
   function handleChange(event){
-    console.log(event.target.value)
+    setSearchTerm(event.target.value)
   
   }
 
@@ -72,7 +74,9 @@ function Search(){
     <div>
       <label htmlFor='search'>Search: </label>
       <input id='search' type='text' onChange={handleChange} />
-
+    <p>
+      Searching for <strong>{searchTerm}</strong>
+    </p>
     </div>
   )
 }
