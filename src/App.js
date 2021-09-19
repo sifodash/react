@@ -71,7 +71,7 @@ function List(props) {
 }
 
 
-function Search(props){
+function Search({search, onSearch}){
  
 
  
@@ -79,7 +79,7 @@ function Search(props){
   return (
     <div>
       <label htmlFor='search'>Search: </label>
-      <input id='search' type='text' value={props.search} onChange={props.onSearch} />
+      <input id='search' type='text' value={search} onChange={onSearch} />
 
     </div>
   )
