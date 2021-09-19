@@ -31,16 +31,23 @@ function App() {
     }
   ]
   
+  const [searchTerm, setSearchTerm] = React.useState('React')
+
   function handleSearch(event){
-    console.log(event.target.value)
+    setSearchTerm(event.target.value)
+   
   }
   
+  const searchedStories = stories.filter(function(story){
+    return story.title.toLowerCase().includes(searchTerm.toLowerCase())
+  })
+
   return (
     <div className="App">
       <h1>My Stories</h1>
-      <Search onSearch={handleSearch} />
+      <Search search={searchTerm} onSearch={handleSearch} />
      {/* Creating first instance of list */}
-      <List list={stories}/>
+      <List list={searchedStories}/>
 
     </div>
   )
@@ -65,21 +72,15 @@ function List(props) {
 
 
 function Search(props){
-  const [searchTerm, setSearchTerm] = React.useState('')
+ 
 
-  function handleChange(event){
-    setSearchTerm(event.target.value)
-  
-    props.onSearch(event)
-  }
+ 
 
   return (
     <div>
       <label htmlFor='search'>Search: </label>
-      <input id='search' type='text' onChange={handleChange} />
-    <p>
-      Searching for <strong>{searchTerm}</strong>
-    </p>
+      <input id='search' type='text' value={props.search} onChange={props.onSearch} />
+
     </div>
   )
 }
