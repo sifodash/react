@@ -55,9 +55,9 @@ function App() {
       id='search'
       label='Search'
       value={searchTerm}
-      onInputChange={handleSearch}
-     />
-     
+      onInputChange={handleSearch}>
+        <strong>Search:</strong>
+     </InputWithLabel>
      {/* Creating first instance of list */}
       <List list={searchedStories}/>
 
@@ -113,11 +113,11 @@ function Item(props){
   )
 }
 
-function InputWithLabel({id, label, value, type='text', onInputChange}) {
+function InputWithLabel({id, label, value, type='text', onInputChange, children}) {
 
   return (
     <>
-      <label htmlFor={id}>{label}</label>
+      <label htmlFor={id}>{children}</label>
       <input id={id} value={value} type={type} onChange={onInputChange}/>
     </>
 
