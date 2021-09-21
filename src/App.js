@@ -43,11 +43,26 @@ function App() {
 
   const [stories, setStories] = React.useState([])
 
+  const [isLoading, setIsLoading] = React.useState(false)
+    
   React.useEffect(() => {
-    getAsyncStories().then(result => {
+    
+    setIsLoading(true)
+
+ 
+
+    getAsyncStories().then((result) => {
       setStories(result.data.stories)
+      setIsLoading(false)
     })
+    
+    
   }, [])
+
+
+
+
+
 
   function handleRemoveStory(item) {
     const newStories = stories.filter(function(story){
@@ -82,7 +97,13 @@ function App() {
         <strong>Search:</strong>
      </InputWithLabel>
      {/* Creating first instance of list */}
-      <List list={searchedStories} onRemoveItem={handleRemoveStory}/>
+     
+
+    {isLoading ? (
+      <p>Loading...</p>
+    ): (
+       <List list={searchedStories} onRemoveItem={handleRemoveStory}/>
+    )}
 
     </div>
   )
