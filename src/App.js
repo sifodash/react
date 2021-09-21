@@ -10,7 +10,7 @@ import ReactDom from 'react-dom'
 
 function App() {
 
-  const stories = [
+  const initialStories = [
     {
       title:'React',
       url: 'https://reactjs.org',
@@ -35,6 +35,17 @@ function App() {
     localStorage.getItem('search') || "React"
   )
 
+  const [stories, setStories] = React.useState(initialStories)
+
+  function handleRemoveStory(item) {
+    const newStories = stories.filter(function(story){
+      return(
+      item.objectID !== story.objectID
+      )
+    })
+    setStories(newStories)
+  }
+    
   function handleSearch(event){
     setSearchTerm(event.target.value)
    
@@ -59,7 +70,7 @@ function App() {
         <strong>Search:</strong>
      </InputWithLabel>
      {/* Creating first instance of list */}
-      <List list={searchedStories}/>
+      <List list={searchedStories} onRemoveItem={handleRemoveStory}/>
 
     </div>
   )
@@ -73,7 +84,7 @@ function List(props) {
       {props.list.map(function(item){
         return(
 
-        <Item key={item.objectID} item={item} />
+        <Item key={item.objectID} item={item} onRemoveItem={props.onRemoveItem} />
 
         )
       })}
@@ -100,6 +111,10 @@ function Search({search, onSearch}){
 
 function Item(props){
 
+  function handleRemoveItem(item){
+    props.onRemoveItem(item)
+  }
+
   return (
 
   <li>
@@ -109,6 +124,11 @@ function Item(props){
     <span>{props.item.author}</span>
     <span>{props.item.num_comments}</span>
     <span>{props.item.points}</span>
+    <span>
+      <button type='button' onClick={handleRemoveItem}>
+        Dismiss
+      </button>
+    </span>
   </li>
   )
 }
