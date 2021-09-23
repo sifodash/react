@@ -10,6 +10,20 @@ import ReactDom from 'react-dom'
 
 function App() {
 
+  const storiesReducer = (state, action) => {
+    if (action.type === 'SET_STORIES') {
+      return action.payload
+    } else if (action.type = 'REMOVE_STORY'){
+      return state.filter( function(story) {
+        return action.payload.objectID !== story.objectID
+      }
+
+      )
+    }  else {
+      throw new Error();
+    }
+  }
+
   const initialStories = [
     {title:'React',
       url:'https://reactjs.org/',
@@ -29,6 +43,11 @@ function App() {
     }
   ]
   
+  
+  const [stories, dispatchStories] = React.useReducer(
+    storiesReducer, []
+  )
+
   const getAsyncStories = () =>
     new Promise((resolve) => {
       setTimeout(
@@ -41,7 +60,7 @@ function App() {
     localStorage.getItem('search') || "React"
   )
 
-  const [stories, setStories] = React.useState([])
+
 
   const [isLoading, setIsLoading] = React.useState(false)
     
@@ -51,8 +70,12 @@ function App() {
 
  
 
+
     getAsyncStories().then((result) => {
-      setStories(result.data.stories)
+      dispatchStories({
+        type:'SET_STORIES',
+        payload: result.data.stories
+      })
       setIsLoading(false)
     })
     
@@ -65,12 +88,11 @@ function App() {
 
 
   function handleRemoveStory(item) {
-    const newStories = stories.filter(function(story){
-      return(
-      item.objectID !== story.objectID
-      )
+
+    dispatchStories({
+      type:'REMOVE_STORY',
+      payload:item
     })
-    setStories(newStories)
   }
     
   function handleSearch(event){
@@ -144,8 +166,9 @@ function Search({search, onSearch}){
 
 function Item(props){
 
-  function handleRemoveItem(item){
-    props.onRemoveItem(item)
+  function handleRemoveItem(){
+    props.onRemoveItem(props.item)
+    console.log(props.item)
   }
 
   return (
