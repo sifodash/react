@@ -10,18 +10,41 @@ import ReactDom from 'react-dom'
 
 function App() {
 
-  const storiesReducer = (state, action) => {
-    if (action.type === 'SET_STORIES') {
-      return action.payload
-    } else if (action.type = 'REMOVE_STORY'){
-      return state.filter( function(story) {
-        return action.payload.objectID !== story.objectID
-      }
+  const API_ENDPOINT = 'https://hn.algolia.com/api.v1/search?query='
 
-      )
-    }  else {
-      throw new Error();
-    }
+  const storiesReducer = (state, action) => {
+      switch(action.type) {
+        case 'STORIES_FETCH_INIT':
+          return {
+            ...state,
+            isLoading:true,
+            isError:false,
+            
+          }
+        case 'STORIES_FETCH_SUCCESS':
+          return {
+            ...state,
+            isLoading:false,
+            isError:false,
+            data: action.payload,
+
+          }
+        case 'STORIES_FETCH_FAILURE':
+          return {
+            ...state,
+            isLoading:false,
+            isError:true,
+          }
+        case 'REMOVE_STORY':
+          return {
+            ...state,
+            data: state.data.filter(function(story){
+            return story.objectID !== action.payload.objectID
+          })
+
+        } 
+        }
+
   }
 
   const initialStories = [
@@ -45,7 +68,7 @@ function App() {
   
   
   const [stories, dispatchStories] = React.useReducer(
-    storiesReducer, []
+    storiesReducer, {data: [], isLoading:false, isError:false}
   )
 
   const getAsyncStories = () =>
@@ -62,21 +85,27 @@ function App() {
 
 
 
-  const [isLoading, setIsLoading] = React.useState(false)
+
     
   React.useEffect(() => {
     
-    setIsLoading(true)
+    dispatchStories({
+      type:'STORIES_FETCH_INIT'
+    })
 
  
 
 
     getAsyncStories().then((result) => {
       dispatchStories({
-        type:'SET_STORIES',
+        type:'STORIES_FETCH_SUCCESS',
         payload: result.data.stories
       })
-      setIsLoading(false)
+  
+    }).catch(function() {
+      dispatchStories({
+        type:'STORIES_FETCH_FAILURE',
+      })
     })
     
     
@@ -103,7 +132,7 @@ function App() {
   React.useEffect(() => {
     localStorage.setItem('search', searchTerm)}, [searchTerm])
 
-  const searchedStories = stories.filter(function(story){
+  const searchedStories = stories.data.filter(function(story){
     return story.title.toLowerCase().includes(searchTerm.toLowerCase())
   })
 
@@ -121,7 +150,7 @@ function App() {
      {/* Creating first instance of list */}
      
 
-    {isLoading ? (
+    {stories.isLoading ? (
       <p>Loading...</p>
     ): (
        <List list={searchedStories} onRemoveItem={handleRemoveStory}/>
