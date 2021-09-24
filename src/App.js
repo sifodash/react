@@ -89,6 +89,11 @@ function App() {
     
   React.useEffect(() => {
     
+
+    if(!searchTerm) return;
+
+
+
     dispatchStories({
       type:'STORIES_FETCH_INIT'
     })
@@ -96,7 +101,7 @@ function App() {
  
 
 
-    fetch(`${API_ENDPOINT}react`).then((response) => response.json())
+    fetch(`${API_ENDPOINT}${searchTerm}`).then((response) => response.json())
     .then((result) => {
       dispatchStories({
         type:'STORIES_FETCH_SUCCESS',
@@ -110,7 +115,7 @@ function App() {
     })
 
 
-  },[])
+  },[searchTerm])
 
 
 
@@ -155,7 +160,7 @@ function App() {
     {stories.isLoading ? (
       <p>Loading...</p>
     ): (
-       <List list={searchedStories} onRemoveItem={handleRemoveStory}/>
+       <List list={stories.data} onRemoveItem={handleRemoveStory}/>
     )}
 
     </div>
